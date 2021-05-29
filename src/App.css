@@ -3,4 +3,28 @@
   margin: 0;
   padding: 0;
   font-family: "Montserrat", sans-serif;
+  line-height: 1;
+  font-weight: 400;
+}
+
+#root,
+.App,
+.main {
+  height: 100%;
+}
+a {
+  text-decoration: none;
+}
+
+a,
+a:hover {
+  transition: all 0.4s ease-in-out;
+}
+
+.main {
+  width: 100%;
+  height: calc(100% - 5rem);
+  max-width: 1450px;
+  padding: 0 10px;
+  margin: auto;
 }
