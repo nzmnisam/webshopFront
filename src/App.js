@@ -1,15 +1,38 @@
-import { BrowserRouter as Router } from "react-router-dom";
-import Navbar from "./Components/Navbar/Navbar";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+//pages
 import Homepage from "./Pages/Homepage/Homepage";
+import Registration from "./Pages/Registration/Registration";
+
+//layouts
+import MainLayout from "./Layouts/MainLayout";
+
 import "./App.css";
+import HomepageLayout from "./Layouts/HomepageLayout";
+
 function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar />
-        <div className="main">
-          <Homepage />
-        </div>
+        <Switch>
+          <Route
+            path="/"
+            render={() => (
+              <HomepageLayout>
+                <Homepage />
+              </HomepageLayout>
+            )}
+            exact={true}
+          />
+          <Route
+            path="/registration"
+            render={() => (
+              <MainLayout>
+                <Registration />
+              </MainLayout>
+            )}
+          />
+        </Switch>
       </Router>
     </div>
   );

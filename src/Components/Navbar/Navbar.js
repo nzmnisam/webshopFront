@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "../Buttons/Button";
 import { MenuItems } from "./MenuItems";
 import "./Navbar.css";
@@ -12,9 +13,9 @@ const Navbar = () => {
 
   return (
     <nav className="Navbar">
-      <h1 className="navbar-logo">
+      <Link to="/" className="navbar-logo">
         WebShop <i className="fas fa-couch"></i>
-      </h1>
+      </Link>
       <div className="menu-icon" onClick={handleClick}>
         <i className={clicked ? "fas fa-times" : "fas fa-bars"}></i>
       </div>
@@ -22,14 +23,16 @@ const Navbar = () => {
         {MenuItems.map((item, index) => {
           return (
             <li key={index}>
-              <a className={item.cName} href={item.url}>
+              <Link className={item.cName} to={item.url}>
                 {item.title}
-              </a>
+              </Link>
             </li>
           );
         })}
       </ul>
-      <Button>Prijavi se</Button>
+      <Link to="/registration">
+        <Button>Prijavi se</Button>
+      </Link>
     </nav>
   );
 };
