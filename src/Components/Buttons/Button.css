@@ -1,5 +1,6 @@
 :root {
   --primary: #3acbf7;
+  --secondary: #e664c5;
 }
 
 .btn {
@@ -21,6 +22,9 @@
 .btn--primary {
   background-color: var(--primary);
 }
+.btn--secondary {
+  background-color: var(--secondary);
+}
 
 .btn--outline {
   background-color: transparent;
@@ -31,8 +35,28 @@
   transition: all 0.3s ease-out;
 }
 
+.btn--signin {
+  background-color: var(--primary);
+  display: block;
+  width: 100%;
+  margin: 5px auto !important;
+}
+
+.btn--signin--admin {
+  background-color: var(--primary);
+  display: block;
+  width: 50%;
+  margin: 15px auto 15px !important;
+}
+
+.btn--signin:hover {
+  background-color: #8a91f8;
+  color: #fff;
+}
+
 .btn--medium {
   padding: 8px 20px;
+  margin: 5px;
   border-radius: 0px;
   font-size: 18px;
   color: #fff;

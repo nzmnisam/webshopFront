@@ -1,12 +1,9 @@
 import React from "react";
+import SignUp from "../../Components/SignUp/SignUp";
 import "./Registration.css";
 
-const Registration = () => {
-  return (
-    <div>
-      <h1>Registracija</h1>
-    </div>
-  );
+const Registration = (props) => {
+  return <SignUp {...props} />;
 };
 
 export default Registration;

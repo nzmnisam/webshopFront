@@ -1,7 +1,13 @@
 import React from "react";
 import "./Button.css";
 
-const CLASSES = ["btn--primary", "btn--outline"];
+const CLASSES = [
+  "btn--primary",
+  "btn--secondary",
+  "btn--outline",
+  "btn--signin",
+  "btn--signin--admin",
+];
 
 const SIZES = ["btn--medium", "btn--large"];
 
