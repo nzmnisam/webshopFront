@@ -4,8 +4,12 @@ import "./SignUp.css";
 import FormInput from "../Forms/FormInput/FormInput";
 import { useHistory } from "react-router";
 
+import { setCurrentUser } from "../../Redux/User/User.actions";
+import { connect } from "react-redux";
+
 const SignUp = (props) => {
   const history = useHistory();
+  const { currentUser } = props;
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,8 +39,11 @@ const SignUp = (props) => {
         })
         .then((res) => {
           const { user } = res.data;
-          localStorage.setItem("user", JSON.stringify(user));
+          // localStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("token", res.data.token);
+
+          props.setCurrentUser(user);
+
           history.push("/");
         });
     } catch (error) {
@@ -106,5 +113,12 @@ const SignUp = (props) => {
     </div>
   );
 };
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 
-export default SignUp;
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

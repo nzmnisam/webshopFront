@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { setCurrentUser } from "./Redux/User/User.actions";
+import { connect } from "react-redux";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -22,7 +26,9 @@ const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
 });
 
-function App() {
+function App(props) {
+  const { currentUser } = props;
+
   return (
     <div className="App">
       <Router>
@@ -62,4 +68,12 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

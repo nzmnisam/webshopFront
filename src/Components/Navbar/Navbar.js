@@ -4,15 +4,19 @@ import Button from "../Buttons/Button";
 import { MenuItems } from "./MenuItems";
 import "./Navbar.css";
 
-const Navbar = () => {
-  let user = null;
-  let admin = null;
-  if (localStorage.getItem("user")) {
-    user = JSON.parse(localStorage.getItem("user"));
-  }
-  if (localStorage.getItem("admin")) {
-    admin = JSON.parse(localStorage.getItem("admin"));
-  }
+import { setCurrentUser } from "../../Redux/User/User.actions";
+import { connect } from "react-redux";
+
+const Navbar = (props) => {
+  // let user = null;
+  // let admin = null;
+  // if (localStorage.getItem("user")) {
+  //   user = JSON.parse(localStorage.getItem("user"));
+  // }
+  // if (localStorage.getItem("admin")) {
+  //   admin = JSON.parse(localStorage.getItem("admin"));
+  // }
+
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {
@@ -23,8 +27,9 @@ const Navbar = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("admin");
     localStorage.removeItem("token");
-    user = null;
-    admin = null;
+    // user = null;
+    // admin = null;
+    props.setCurrentUser(null);
     window.location.reload();
   };
 
@@ -48,13 +53,13 @@ const Navbar = () => {
         })}
       </ul>
 
-      {(user || admin) && (
+      {props.currentUser && (
         <>
           <Button onClick={handleLogout}>Odjavi se</Button>
         </>
       )}
 
-      {!(user || admin) && (
+      {!props.currentUser && (
         <>
           <Link to="/registration">
             <Button>Prijavi se</Button>
@@ -68,4 +73,11 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

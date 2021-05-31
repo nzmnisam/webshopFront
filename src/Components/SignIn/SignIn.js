@@ -4,8 +4,12 @@ import Button from "../Buttons/Button";
 import { useHistory } from "react-router";
 import FormInput from "../Forms/FormInput/FormInput";
 
+import { setCurrentUser } from "../../Redux/User/User.actions";
+import { connect } from "react-redux";
+
 const SignIn = (props) => {
   const history = useHistory();
+  const { currentUser } = props;
 
   //admin flag
   const [loginAsAdmin, setLoginAsAdmin] = useState(false);
@@ -38,6 +42,9 @@ const SignIn = (props) => {
           const { user } = res.data;
           localStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("token", res.data.token);
+
+          props.setCurrentUser(user);
+
           history.push("/");
         });
     } catch (error) {
@@ -68,6 +75,9 @@ const SignIn = (props) => {
           const { admin } = res.data;
           localStorage.setItem("admin", JSON.stringify(admin));
           localStorage.setItem("token", res.data.token);
+
+          props.setCurrentUser(admin);
+
           history.push("/");
         });
     } catch (error) {
@@ -165,5 +175,12 @@ const SignIn = (props) => {
     </div>
   );
 };
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
 
-export default SignIn;
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

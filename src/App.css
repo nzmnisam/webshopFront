@@ -24,7 +24,7 @@ a:hover {
 
 .main {
   width: 100%;
-  height: calc(100% - 5rem);
+  height: calc(100% - 4.5rem - 8.5rem);
   max-width: 1450px;
   padding: 0 10px;
   margin: auto;
