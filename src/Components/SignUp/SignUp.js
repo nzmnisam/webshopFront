@@ -2,24 +2,20 @@ import React, { useState } from "react";
 import Button from "../Buttons/Button";
 import "./SignUp.css";
 import FormInput from "../Forms/FormInput/FormInput";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import { setCurrentUser } from "../../Redux/User/User.actions";
 import { connect } from "react-redux";
 
 const SignUp = (props) => {
   const history = useHistory();
-  const { currentUser } = props;
+  const { currentUser, setCurrentUser } = props;
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
-
-  //   const handleFormSubmit = (e) => {
-  //     e.preventDefault();
-  //   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +38,7 @@ const SignUp = (props) => {
           // localStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("token", res.data.token);
 
-          props.setCurrentUser(user);
+          setCurrentUser(user);
 
           history.push("/");
         });

@@ -1,5 +1,10 @@
 export const MenuItems = [
   {
+    title: "Moj nalog",
+    url: "/dashboard",
+    cName: "nav-links",
+  },
+  {
     title: "Akcija",
     url: "#",
     cName: "nav-links",

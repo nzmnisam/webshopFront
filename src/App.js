@@ -14,6 +14,7 @@ import axios from "axios";
 import Homepage from "./Pages/Homepage/Homepage";
 import Registration from "./Pages/Registration/Registration";
 import Login from "./Pages/Login/Login";
+import Dashboard from "./Pages/Dashboard/Dashboard";
 
 //layouts
 import MainLayout from "./Layouts/MainLayout";
@@ -21,6 +22,7 @@ import HomepageLayout from "./Layouts/HomepageLayout";
 
 //css
 import "./App.css";
+import WithAuth from "./hoc/withAuth";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -44,15 +46,11 @@ function App(props) {
           />
           <Route
             path="/registration"
-            render={() =>
-              localStorage.getItem("user") ? (
-                <Redirect to="/" />
-              ) : (
-                <MainLayout>
-                  <Registration api={api} />
-                </MainLayout>
-              )
-            }
+            render={() => (
+              <MainLayout>
+                <Registration api={api} />
+              </MainLayout>
+            )}
           />
           <Route
             path="/login"
@@ -63,6 +61,16 @@ function App(props) {
             )}
           />
         </Switch>
+        <Route
+          path="/dashboard"
+          render={() => (
+            <WithAuth>
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            </WithAuth>
+          )}
+        />
       </Router>
     </div>
   );

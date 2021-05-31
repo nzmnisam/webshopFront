@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./SignIn.css";
 import Button from "../Buttons/Button";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import FormInput from "../Forms/FormInput/FormInput";
 
 import { setCurrentUser } from "../../Redux/User/User.actions";
@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 
 const SignIn = (props) => {
   const history = useHistory();
-  const { currentUser } = props;
+  const { currentUser, setCurrentUser } = props;
 
   //admin flag
   const [loginAsAdmin, setLoginAsAdmin] = useState(false);
@@ -43,7 +43,7 @@ const SignIn = (props) => {
           localStorage.setItem("user", JSON.stringify(user));
           localStorage.setItem("token", res.data.token);
 
-          props.setCurrentUser(user);
+          setCurrentUser(user);
 
           history.push("/");
         });
@@ -76,7 +76,7 @@ const SignIn = (props) => {
           localStorage.setItem("admin", JSON.stringify(admin));
           localStorage.setItem("token", res.data.token);
 
-          props.setCurrentUser(admin);
+          setCurrentUser(admin);
 
           history.push("/");
         });
