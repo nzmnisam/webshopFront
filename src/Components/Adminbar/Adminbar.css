@@ -1,0 +1,27 @@
+.adminBar {
+  background: #e664c5;
+  height: 2.5rem;
+  align-items: center;
+  display: flex;
+}
+
+.admin-menu {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-content: end;
+  width: 100vw;
+  padding-right: 0.5rem;
+  list-style: none;
+}
+
+.adminbar-links {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+
+.adminbar-links:hover {
+  color: #6e6e6e;
+  /* border-radius: 4px; */
+  transition: all 0.2s ease-out;
+}

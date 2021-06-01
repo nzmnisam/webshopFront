@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignIn.css";
 import Button from "../Buttons/Button";
 import { useHistory } from "react-router-dom";
 import FormInput from "../Forms/FormInput/FormInput";
 
-import { setCurrentUser } from "../../Redux/User/User.actions";
-import { connect } from "react-redux";
+import {
+  signInUser,
+  signInAdmin,
+  resetAuthForms,
+} from "../../Redux/User/User.actions";
+
+import { useDispatch, useSelector } from "react-redux";
+
+const mapState = ({ user }) => ({
+  signInSuccess: user.signInSuccess,
+  signInError: user.signInError,
+});
 
 const SignIn = (props) => {
+  const { signInSuccess, signInError } = useSelector(mapState);
+  const dispatch = useDispatch();
   const history = useHistory();
-  const { currentUser, setCurrentUser } = props;
 
   //admin flag
   const [loginAsAdmin, setLoginAsAdmin] = useState(false);
@@ -19,70 +30,28 @@ const SignIn = (props) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const handleFormSubmit = async (e) => {
+  useEffect(() => {
+    if (signInSuccess) {
+      dispatch(resetAuthForms());
+      history.push("/");
+    }
+  }, [signInSuccess]);
+
+  useEffect(() => {
+    if (Array.isArray(signInError) && signInError.length > 0) {
+      setErrors(signInError);
+    }
+  }, [signInError]);
+
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (!email) {
-      const error = ["Niste uneli E-mail"];
-      setErrors(error);
-      return;
-    }
-    if (!password) {
-      const error = ["Niste uneli šifru"];
-      setErrors(error);
-      return;
-    }
 
-    try {
-      await props.api
-        .post(`/login`, {
-          email: email,
-          password: password,
-        })
-        .then((res) => {
-          const { user } = res.data;
-          localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", res.data.token);
-
-          setCurrentUser(user);
-
-          history.push("/");
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(signInUser({ email, password }));
   };
 
-  const handleAdminFormSubmit = async (e) => {
+  const handleAdminFormSubmit = (e) => {
     e.preventDefault();
-    if (!username) {
-      const error = ["Niste uneli korisničko ime"];
-      setErrors(error);
-      return;
-    }
-    if (!password) {
-      const error = ["Niste uneli šifru"];
-      setErrors(error);
-      return;
-    }
-
-    try {
-      await props.api
-        .post(`/login/admin`, {
-          username: username,
-          password: password,
-        })
-        .then((res) => {
-          const { admin } = res.data;
-          localStorage.setItem("admin", JSON.stringify(admin));
-          localStorage.setItem("token", res.data.token);
-
-          setCurrentUser(admin);
-
-          history.push("/");
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(signInAdmin({ username, password }));
   };
 
   const handleAdminLogin = (e) => {
@@ -175,12 +144,5 @@ const SignIn = (props) => {
     </div>
   );
 };
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
 
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default SignIn;

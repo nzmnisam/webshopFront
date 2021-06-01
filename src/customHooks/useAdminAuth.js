@@ -3,19 +3,20 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 const mapState = ({ user }) => ({
-  currentUser: user.currentUser,
   currentAdmin: user.currentAdmin,
 });
 
-const useAuth = (props) => {
+const useAdminAuth = (props) => {
   const history = useHistory();
-  const { currentUser, currentAdmin } = useSelector(mapState);
+  const { currentAdmin } = useSelector(mapState);
+
   useEffect(() => {
-    if (!currentUser && !currentAdmin) {
+    if (!currentAdmin) {
       history.push("/login");
     }
-  }, [currentUser, currentAdmin]);
-  return { currentUser, currentAdmin };
+  }, [currentAdmin]);
+
+  return currentAdmin;
 };
 
-export default useAuth;
+export default useAdminAuth;

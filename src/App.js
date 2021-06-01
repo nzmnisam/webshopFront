@@ -1,14 +1,10 @@
-import { useState } from "react";
-import { setCurrentUser } from "./Redux/User/User.actions";
-import { connect } from "react-redux";
-
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 
 //pages
 import Homepage from "./Pages/Homepage/Homepage";
@@ -24,16 +20,22 @@ import HomepageLayout from "./Layouts/HomepageLayout";
 import "./App.css";
 import WithAuth from "./hoc/withAuth";
 
-const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+import { useSelector } from "react-redux";
+import Admin from "./Pages/Admin/Admin";
+import WithAdminAuth from "./hoc/withAdminAuth";
+import Adminbar from "./Components/Adminbar/Adminbar";
+
+const mapState = ({ user }) => ({
+  currentUser: user.currentUser,
+  currentAdmin: user.currentAdmin,
 });
 
 function App(props) {
-  const { currentUser } = props;
-
+  const { currentUser, currentAdmin } = useSelector(mapState);
   return (
     <div className="App">
       <Router>
+        <Adminbar />
         <Switch>
           <Route
             path="/"
@@ -46,19 +48,27 @@ function App(props) {
           />
           <Route
             path="/registration"
-            render={() => (
-              <MainLayout>
-                <Registration api={api} />
-              </MainLayout>
-            )}
+            render={() =>
+              currentUser || currentAdmin ? (
+                <Redirect to="/" />
+              ) : (
+                <MainLayout>
+                  <Registration />
+                </MainLayout>
+              )
+            }
           />
           <Route
             path="/login"
-            render={() => (
-              <MainLayout>
-                <Login api={api} />
-              </MainLayout>
-            )}
+            render={() =>
+              currentUser || currentAdmin ? (
+                <Redirect to="/" />
+              ) : (
+                <MainLayout>
+                  <Login />
+                </MainLayout>
+              )
+            }
           />
         </Switch>
         <Route
@@ -71,17 +81,19 @@ function App(props) {
             </WithAuth>
           )}
         />
+        <Route
+          path="/admin"
+          render={() => (
+            <WithAdminAuth>
+              <MainLayout>
+                <Admin />
+              </MainLayout>
+            </WithAdminAuth>
+          )}
+        />
       </Router>
     </div>
   );
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

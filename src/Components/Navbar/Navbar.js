@@ -1,21 +1,24 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Button from "../Buttons/Button";
 import { MenuItems } from "./MenuItems";
 import "./Navbar.css";
 
-import { setCurrentUser } from "../../Redux/User/User.actions";
-import { connect } from "react-redux";
+import {
+  setCurrentAdmin,
+  setCurrentUser,
+  resetAuthForms,
+} from "../../Redux/User/User.actions";
+
+const mapState = ({ user, admin }) => ({
+  currentUser: user.currentUser,
+  currentAdmin: user.currentAdmin,
+});
 
 const Navbar = (props) => {
-  // let user = null;
-  // let admin = null;
-  // if (localStorage.getItem("user")) {
-  //   user = JSON.parse(localStorage.getItem("user"));
-  // }
-  // if (localStorage.getItem("admin")) {
-  //   admin = JSON.parse(localStorage.getItem("admin"));
-  // }
+  const { currentUser, currentAdmin } = useSelector(mapState);
+  const dispatch = useDispatch();
 
   const [clicked, setClicked] = useState(false);
 
@@ -24,12 +27,11 @@ const Navbar = (props) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("admin");
     localStorage.removeItem("token");
-    // user = null;
-    // admin = null;
-    props.setCurrentUser(null);
+    dispatch(resetAuthForms());
+
+    dispatch(setCurrentUser(null));
+    dispatch(setCurrentAdmin(null));
     window.location.reload();
   };
 
@@ -43,23 +45,35 @@ const Navbar = (props) => {
       </div>
       <ul className={clicked ? "nav-menu active" : "nav-menu"}>
         {MenuItems.map((item, index) => {
-          return (
-            <li key={index}>
-              <Link className={item.cName} to={item.url}>
-                {item.title}
-              </Link>
-            </li>
-          );
+          if (currentUser || currentAdmin) {
+            return (
+              <li key={index}>
+                <Link className={item.cName} to={item.url}>
+                  {item.title}
+                </Link>
+              </li>
+            );
+          } else {
+            if (item.url !== "/dashboard") {
+              return (
+                <li key={index}>
+                  <Link className={item.cName} to={item.url}>
+                    {item.title}
+                  </Link>
+                </li>
+              );
+            }
+          }
         })}
       </ul>
 
-      {props.currentUser && (
+      {(currentUser || currentAdmin) && (
         <>
           <Button onClick={handleLogout}>Odjavi se</Button>
         </>
       )}
 
-      {!props.currentUser && (
+      {!currentUser && !currentAdmin && (
         <>
           <Link to="/registration">
             <Button>Prijavi se</Button>
@@ -73,11 +87,4 @@ const Navbar = (props) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default Navbar;

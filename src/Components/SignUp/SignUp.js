@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../Buttons/Button";
 import "./SignUp.css";
 import FormInput from "../Forms/FormInput/FormInput";
 import { useHistory } from "react-router-dom";
 
-import { setCurrentUser } from "../../Redux/User/User.actions";
-import { connect } from "react-redux";
+import { resetAuthForms, signUpUser } from "../../Redux/User/User.actions";
+import { useSelector, useDispatch } from "react-redux";
+
+const mapState = ({ user }) => ({
+  signUpSuccess: user.signUpSuccess,
+  signUpError: user.signUpError,
+});
 
 const SignUp = (props) => {
+  const { signUpSuccess, signUpError } = useSelector(mapState);
+  const dispatch = useDispatch();
   const history = useHistory();
-  const { currentUser, setCurrentUser } = props;
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,34 +23,23 @@ const SignUp = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const handleFormSubmit = async (e) => {
+  useEffect(() => {
+    if (signUpSuccess) {
+      dispatch(resetAuthForms());
+      history.push("/");
+    }
+  }, [signUpSuccess]);
+
+  useEffect(() => {
+    if (Array.isArray(signUpError) && signUpError.length > 0) {
+      setErrors(signUpError);
+    }
+  }, [signUpError]);
+
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      const error = ["Šifre se ne podudaraju"];
-      setErrors(error);
-      return;
-    }
 
-    try {
-      await props.api
-        .post(`/register`, {
-          name: displayName,
-          email: email,
-          password: password,
-          password_confirmation: confirmPassword,
-        })
-        .then((res) => {
-          const { user } = res.data;
-          // localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", res.data.token);
-
-          setCurrentUser(user);
-
-          history.push("/");
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(signUpUser({ displayName, email, password, confirmPassword }));
   };
 
   return (
@@ -109,12 +104,5 @@ const SignUp = (props) => {
     </div>
   );
 };
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
 
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default SignUp;
