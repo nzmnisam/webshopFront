@@ -11,6 +11,9 @@ import Homepage from "./Pages/Homepage/Homepage";
 import Registration from "./Pages/Registration/Registration";
 import Login from "./Pages/Login/Login";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import Search from "./Pages/Search/Search";
+import Product from "./Pages/Product/Product";
+import CartPage from "./Pages/CartPage/CartPage";
 
 //layouts
 import MainLayout from "./Layouts/MainLayout";
@@ -24,6 +27,8 @@ import { useSelector } from "react-redux";
 import Admin from "./Pages/Admin/Admin";
 import WithAdminAuth from "./hoc/withAdminAuth";
 import Adminbar from "./Components/Adminbar/Adminbar";
+import AdminLayout from "./Layouts/AdminLayout";
+import ProizvodiAdmin from "./Pages/ProizvodiAdmin/ProizvodiAdmin";
 
 const mapState = ({ user }) => ({
   currentUser: user.currentUser,
@@ -33,8 +38,8 @@ const mapState = ({ user }) => ({
 function App(props) {
   const { currentUser, currentAdmin } = useSelector(mapState);
   return (
-    <div className="App">
-      <Router>
+    <Router>
+      <div className="App">
         <Adminbar />
         <Switch>
           <Route
@@ -43,6 +48,41 @@ function App(props) {
               <HomepageLayout>
                 <Homepage />
               </HomepageLayout>
+            )}
+            exact={true}
+          />
+          <Route
+            path="/search"
+            render={() => (
+              <MainLayout>
+                <Search />
+              </MainLayout>
+            )}
+            exact={true}
+          />
+          <Route
+            path="/search/:filterCategory"
+            render={() => (
+              <MainLayout>
+                <Search />
+              </MainLayout>
+            )}
+          />
+          <Route
+            path="/product/:productId"
+            render={() => (
+              <MainLayout>
+                <Product />
+              </MainLayout>
+            )}
+            exact={true}
+          />
+          <Route
+            path="/cart"
+            render={() => (
+              <MainLayout>
+                <CartPage />
+              </MainLayout>
             )}
             exact={true}
           />
@@ -82,17 +122,28 @@ function App(props) {
           )}
         />
         <Route
+          exact={true}
           path="/admin"
           render={() => (
             <WithAdminAuth>
-              <MainLayout>
+              <AdminLayout>
                 <Admin />
-              </MainLayout>
+              </AdminLayout>
             </WithAdminAuth>
           )}
         />
-      </Router>
-    </div>
+        <Route
+          path="/admin/proizvodi"
+          render={() => (
+            <WithAdminAuth>
+              <AdminLayout>
+                <ProizvodiAdmin />
+              </AdminLayout>
+            </WithAdminAuth>
+          )}
+        />
+      </div>
+    </Router>
   );
 }
 

@@ -49,6 +49,21 @@
   margin: 15px auto 15px !important;
 }
 
+.btn--add--to--cart {
+  background-color: var(--primary);
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+.btn--add--to--cart:hover {
+  background-color: var(--secondary);
+  display: block;
+  width: 100%;
+  margin: 0;
+  color: #fff;
+}
+
 .btn--signin:hover {
   background-color: #8a91f8;
   color: #fff;

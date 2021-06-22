@@ -5,20 +5,25 @@ import FormInput from "../Forms/FormInput/FormInput";
 import { useHistory } from "react-router-dom";
 
 import { resetAuthForms, signUpUser } from "../../Redux/User/User.actions";
+import { setCities } from "../../Redux/City/City.actions";
 import { useSelector, useDispatch } from "react-redux";
+import FormSelect from "../Forms/FromSelect/FormSelect";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-const mapState = ({ user }) => ({
+const mapState = ({ user, cities }) => ({
   signUpSuccess: user.signUpSuccess,
   signUpError: user.signUpError,
+  allCities: cities.cities,
 });
 
 const SignUp = (props) => {
-  const { signUpSuccess, signUpError } = useSelector(mapState);
+  const { signUpSuccess, signUpError, allCities } = useSelector(mapState);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
@@ -36,10 +41,42 @@ const SignUp = (props) => {
     }
   }, [signUpError]);
 
+  window.addEventListener("beforeunload", (e) => {
+    dispatch(resetAuthForms());
+  });
+
+  useEffect(() => {
+    if (allCities.length === 0) {
+      dispatch(setCities());
+    }
+  }, []);
+
+  const renameCityKeys = (cities) => {
+    cities = cities.map((city) => {
+      city["value"] = city["postanski_broj"];
+      city["name"] = city["naziv"];
+      // delete city["postanski_broj"];
+      // delete city["naziv"];
+      return city;
+    });
+    return cities;
+  };
+
+  const cityOptions = () => {
+    const cities = renameCityKeys(allCities);
+    cities.unshift({
+      value: 0,
+      name: "Izaberite grad",
+    });
+    return cities;
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(signUpUser({ displayName, email, password, confirmPassword }));
+    dispatch(
+      signUpUser({ displayName, email, password, confirmPassword, city })
+    );
   };
 
   return (
@@ -47,13 +84,7 @@ const SignUp = (props) => {
       <div className="signup-container">
         <h2>Napravi nalog</h2>
 
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error, i) => {
-              return <li key={i}>{error}</li>;
-            })}
-          </ul>
-        )}
+        <ErrorMessage errors={errors} />
 
         <div className="signup-formWrap">
           <form onSubmit={handleFormSubmit}>
@@ -66,7 +97,6 @@ const SignUp = (props) => {
               }}
               placeholder="Ime i Prezime"
             />
-
             <FormInput
               type="email"
               name="email"
@@ -76,7 +106,15 @@ const SignUp = (props) => {
               }}
               placeholder="E-mail"
             />
-
+            <FormSelect
+              name="city"
+              value={city}
+              options={cityOptions()}
+              onChange={(e) => {
+                setCity(e.target.value);
+              }}
+              placeholder="City"
+            />
             <FormInput
               type="password"
               name="passsword"
@@ -86,7 +124,6 @@ const SignUp = (props) => {
               }}
               placeholder="Šifra"
             />
-
             <FormInput
               type="password"
               name="confirmPassword"
@@ -96,7 +133,6 @@ const SignUp = (props) => {
               }}
               placeholder="Potvrdi šifru"
             />
-
             <Button buttonStyle={"btn--signin"}>POTVRDI</Button>
           </form>
         </div>

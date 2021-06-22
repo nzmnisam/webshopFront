@@ -11,6 +11,7 @@ import {
 } from "../../Redux/User/User.actions";
 
 import { useDispatch, useSelector } from "react-redux";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 const mapState = ({ user }) => ({
   signInSuccess: user.signInSuccess,
@@ -37,6 +38,10 @@ const SignIn = (props) => {
     }
   }, [signInSuccess]);
 
+  window.addEventListener("beforeunload", (e) => {
+    dispatch(resetAuthForms());
+  });
+
   useEffect(() => {
     if (Array.isArray(signInError) && signInError.length > 0) {
       setErrors(signInError);
@@ -62,13 +67,7 @@ const SignIn = (props) => {
     <div className="signin">
       <div className="signin-container">
         <h2>Uloguj se</h2>
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error, i) => {
-              return <li key={i}>{error}</li>;
-            })}
-          </ul>
-        )}
+        <ErrorMessage errors={errors} />
 
         <div className="signin-formWrap">
           <form>

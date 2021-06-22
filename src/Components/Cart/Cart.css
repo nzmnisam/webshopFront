@@ -1,0 +1,9 @@
+.productsInCart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.productList {
+  margin: 5rem auto;
+}

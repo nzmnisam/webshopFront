@@ -7,6 +7,7 @@ const CLASSES = [
   "btn--outline",
   "btn--signin",
   "btn--signin--admin",
+  "btn--add--to--cart",
 ];
 
 const SIZES = ["btn--medium", "btn--large"];

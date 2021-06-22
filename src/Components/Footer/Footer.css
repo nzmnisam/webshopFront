@@ -1,8 +1,12 @@
 .footer {
+  /* margin-top: -0.5rem; */
 }
 
 .footer-container {
   max-width: 1450px;
   padding: 20px 10px;
   margin: 0 auto;
+
+  /* display: flex;
+  align-items: flex-end; */
 }

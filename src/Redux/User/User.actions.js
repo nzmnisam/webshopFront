@@ -114,8 +114,40 @@ export const signInAdmin =
   };
 
 export const signUpUser =
-  ({ displayName, email, password, confirmPassword }) =>
+  ({ displayName, email, password, confirmPassword, city }) =>
   async (dispatch) => {
+    if (!displayName) {
+      const error = ["Niste uneli ime"];
+      dispatch({
+        type: userTypes.SIGN_UP_ERROR,
+        payload: error,
+      });
+      return;
+    }
+    if (!email) {
+      const error = ["Niste uneli E-mail"];
+      dispatch({
+        type: userTypes.SIGN_UP_ERROR,
+        payload: error,
+      });
+      return;
+    }
+    if (city === "" || city === "0") {
+      const error = ["Niste izabrali grad"];
+      dispatch({
+        type: userTypes.SIGN_UP_ERROR,
+        payload: error,
+      });
+      return;
+    }
+    if (!password) {
+      const error = ["Niste uneli šifru"];
+      dispatch({
+        type: userTypes.SIGN_UP_ERROR,
+        payload: error,
+      });
+      return;
+    }
     if (password !== confirmPassword) {
       const error = ["Šifre se ne podudaraju"];
       dispatch({
@@ -132,6 +164,7 @@ export const signUpUser =
           email: email,
           password: password,
           password_confirmation: confirmPassword,
+          postanski_broj: city,
         })
         .then((res) => {
           const { user } = res.data;

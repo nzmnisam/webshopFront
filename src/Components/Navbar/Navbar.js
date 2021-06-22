@@ -69,6 +69,11 @@ const Navbar = (props) => {
 
       {(currentUser || currentAdmin) && (
         <>
+          <Link to="/cart">
+            <Button buttonStyle={"btn--secondary"}>
+              <i className="fas fa-shopping-cart"></i>
+            </Button>
+          </Link>
           <Button onClick={handleLogout}>Odjavi se</Button>
         </>
       )}

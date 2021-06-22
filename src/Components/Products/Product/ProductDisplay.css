@@ -1,0 +1,48 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+
+model-viewer {
+  height: 500px;
+  width: 600px;
+}
+
+.productDisplayWrapper h1 {
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.productInfo {
+  margin: 2rem 0;
+}
+
+.addToCartInfo {
+  background-color: #dae3ee;
+  padding: 0.8rem;
+  display: flexbox;
+  height: 4.5rem;
+}
+
+.priceInfo {
+  font-size: 2rem;
+  float: left;
+  display: flex;
+}
+
+.btnDodajUKorpu {
+  display: flex;
+  float: right;
+}
+
+.descrpition {
+  margin: 5rem 0 5rem 3rem;
+}
+
+/* image gallery styles */
+.image-gallery-image {
+  height: 30rem;
+  width: auto;
+}
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 60px;
+}

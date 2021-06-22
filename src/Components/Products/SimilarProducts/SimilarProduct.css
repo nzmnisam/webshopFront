@@ -1,0 +1,18 @@
+.productWrapper a {
+  color: #666565;
+}
+
+.productWrapper a:hover {
+  color: #adadad;
+}
+
+.productPicture {
+  width: auto;
+  height: 14rem;
+  margin-top: 1rem;
+  border-radius: 1.5rem;
+}
+
+.productPicture:hover {
+  border: 0.15rem solid #adadad;
+}

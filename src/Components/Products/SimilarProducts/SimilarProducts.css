@@ -1,0 +1,24 @@
+.similarProductsWrapper {
+  height: 22.5rem;
+  padding: 1.5rem 0 0 1.5rem;
+  display: flexbox;
+  justify-content: left;
+  align-items: left;
+  background-color: rgba(247, 205, 247, 0.667);
+  border-radius: 1rem;
+}
+
+.similarProductsWrapper h2 {
+}
+
+.similarProducts {
+  /* margin: 2rem 2rem 2rem 0; */
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 1.2rem;
+  list-style: none;
+  text-align: left;
+  width: 70vw;
+  justify-content: start;
+}

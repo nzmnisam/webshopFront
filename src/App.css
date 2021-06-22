@@ -9,10 +9,12 @@
 
 #root,
 .App,
-.main,
+/* .main, */
 .full-height {
   height: 100%;
+  min-height: 100vh;
 }
+
 a {
   text-decoration: none;
 }
@@ -24,8 +26,36 @@ a:hover {
 
 .main {
   width: 100%;
-  height: calc(100% - 4.5rem - 8.5rem);
+  /* height: calc(100% - 4.5rem - 8.5rem); */
   max-width: 1450px;
   padding: 0 10px;
   margin: auto;
+}
+
+.adminLayout {
+  height: calc(100% - 6rem - 4.5rem);
+}
+
+.controlPanel {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-height: 100%;
+  padding: 3rem 0 6rem 25rem;
+  border-bottom: 1px solid rgb(165, 161, 161);
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20rem;
+  height: 100%;
+  z-index: 1;
+  border-right: 1px solid rgb(165, 161, 161);
+}
+
+.content {
+  padding: 0 10px;
+  width: 75rem;
 }
