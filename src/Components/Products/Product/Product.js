@@ -6,13 +6,21 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../Redux/Cart/Cart.actions";
 
 const Product = ({ name, price, category_id, sale_id, id, thumbnail }) => {
+  const product = {
+    name,
+    price,
+    category_id,
+    sale_id,
+    thumbnail,
+    id,
+  };
   const dispatch = useDispatch();
   if (!name || typeof price === "undefined" || !category_id) {
     return null;
   }
 
-  const handleAddToCart = (id) => {
-    dispatch(addToCart(id));
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
   };
   return (
     <div className="product">
@@ -35,7 +43,7 @@ const Product = ({ name, price, category_id, sale_id, id, thumbnail }) => {
         <Button
           buttonStyle={"btn--add--to--cart"}
           onClick={() => {
-            handleAddToCart(id);
+            handleAddToCart(product);
           }}
         >
           {" "}

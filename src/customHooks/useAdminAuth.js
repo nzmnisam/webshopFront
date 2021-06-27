@@ -12,7 +12,7 @@ const useAdminAuth = (props) => {
 
   useEffect(() => {
     if (!currentAdmin) {
-      history.push("/login");
+      history.push("/");
     }
   }, [currentAdmin]);
 

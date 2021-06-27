@@ -1,9 +1,32 @@
+.cartTitle {
+  margin: 2rem auto;
+  text-align: center;
+}
+
 .productsInCart {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.totalPriceWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0 1rem 0;
+}
+
+.totalPrice {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 5rem;
+}
+
 .productList {
   margin: 5rem auto;
+  padding: 2rem;
+  border: 1px solid rgb(59, 141, 235);
+}
+.cartButtons {
+  display: flex;
+  justify-content: space-between;
 }

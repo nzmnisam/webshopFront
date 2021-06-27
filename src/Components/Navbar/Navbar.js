@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Button from "../Buttons/Button";
 import { MenuItems } from "./MenuItems";
 import "./Navbar.css";
@@ -11,14 +11,16 @@ import {
   resetAuthForms,
 } from "../../Redux/User/User.actions";
 
-const mapState = ({ user, admin }) => ({
+const mapState = ({ user, cart }) => ({
   currentUser: user.currentUser,
   currentAdmin: user.currentAdmin,
+  cartProducts: cart.cartProducts,
 });
 
 const Navbar = (props) => {
-  const { currentUser, currentAdmin } = useSelector(mapState);
+  const { currentUser, currentAdmin, cartProducts } = useSelector(mapState);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [clicked, setClicked] = useState(false);
 
@@ -28,11 +30,20 @@ const Navbar = (props) => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("cart");
     dispatch(resetAuthForms());
 
     dispatch(setCurrentUser(null));
     dispatch(setCurrentAdmin(null));
-    window.location.reload();
+    // window.location.reload();
+    history.push("/");
+  };
+
+  const calculateCartProductNumber = () => {
+    let quantity = 0;
+    if (cartProducts && cartProducts[0])
+      cartProducts.forEach((product) => (quantity += product.quantity));
+    return quantity;
   };
 
   return (
@@ -70,8 +81,11 @@ const Navbar = (props) => {
       {(currentUser || currentAdmin) && (
         <>
           <Link to="/cart">
-            <Button buttonStyle={"btn--secondary"}>
+            <Button buttonStyle={"btn--secondary"} className="cartButton">
               <i className="fas fa-shopping-cart"></i>
+              <div className="cartNumber">
+                <span>{calculateCartProductNumber()}</span>
+              </div>
             </Button>
           </Link>
           <Button onClick={handleLogout}>Odjavi se</Button>

@@ -12,7 +12,14 @@ const CLASSES = [
 
 const SIZES = ["btn--medium", "btn--large"];
 
-const Button = ({ children, type, onClick, buttonStyle, buttonSize }) => {
+const Button = ({
+  children,
+  type,
+  onClick,
+  buttonStyle,
+  buttonSize,
+  ...props
+}) => {
   const checkButtonClass = CLASSES.includes(buttonStyle)
     ? buttonStyle
     : CLASSES[0];
@@ -21,7 +28,8 @@ const Button = ({ children, type, onClick, buttonStyle, buttonSize }) => {
 
   return (
     <button
-      className={`btn ${checkButtonClass} ${checkButtonSize}`}
+      {...props}
+      className={`btn ${checkButtonClass} ${checkButtonSize} ${props.className}`}
       onClick={onClick}
       type={type}
     >
