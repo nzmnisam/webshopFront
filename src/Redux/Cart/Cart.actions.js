@@ -180,27 +180,35 @@ export const increaseQuantity = (product) => async (dispatch, getState) => {
   }
 };
 
-export const buy = () => (dispatch, getState) => {
+export const buy = () => async (dispatch, getState) => {
   const { cart, user } = getState();
-  cart.cartProducts.forEach(async (product) => {
-    try {
-      //dodati istoriju kupovine
-      await axios.post(
-        "http://127.0.0.1:8000/api/kupuje",
-        {
-          user_id: user.currentUser.id,
-          product_id: product.id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+
+  const productsIdAndQuantity = [];
+  cart.cartProducts.forEach((product) => {
+    const productIdAndQ = {
+      id: product.id,
+      quantity: product.quantity,
+    };
+    productsIdAndQuantity.push(productIdAndQ);
   });
 
-  dispatch(removeAllFromCart());
+  try {
+    const postBuy = await axios.post(
+      `http://127.0.0.1:8000/api/kupuje`,
+      {
+        user_id: user.currentUser.id,
+        products: productsIdAndQuantity,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (postBuy.data) {
+      dispatch(removeAllFromCart());
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
